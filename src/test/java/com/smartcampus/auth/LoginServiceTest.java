@@ -57,7 +57,7 @@ class LoginServiceTest {
         LoginResult result = service.login(EMAIL, "mauvais");
 
         assertEquals(LoginResult.Status.INVALID_CREDENTIALS, result.status());
-        assertEquals("Mot de passe incorrect.", result.message());
+        assertEquals("E-mail ou mot de passe incorrect.", result.message());
     }
 
     @Test
