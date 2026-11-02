@@ -1,0 +1,47 @@
+
+services:
+  api:
+    image: smartcampus:1.0
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: smartcampus
+    ports:
+      - "8081:8080"
+    environment:
+      PORT: "8080"
+      SC_DEMO_EMAIL: "etudiant@smartcampus.ma"
+      SC_DEMO_PASSWORD: "Campus2026!"
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8080/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    networks:
+      - smartcampus-net
+
+  db:
+    image: postgres:16
+    container_name: smartcampus-db
+    environment:
+      POSTGRES_DB: smartcampus
+      POSTGRES_USER: smartcampus
+      POSTGRES_PASSWORD: campus_db_2026
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U smartcampus -d smartcampus"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - smartcampus-net
+
+volumes:
+  postgres_data:
+
+networks:
+  smartcampus-net:
