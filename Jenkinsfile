@@ -13,13 +13,19 @@ pipeline {
         }
         stage('Build') {
             steps {
-                bat 'echo "Simulation du Build (Maven pas encore installé)"'
+                bat 'echo "Simulation du Build reussie" > artefact.txt'
             }
         }
         stage('Test') {
             steps {
-                bat 'echo "Simulation des Tests (Maven pas encore installé)"'
+                bat 'echo "Simulation des Tests reussie"'
             }
+        }
+    }
+    
+    post {
+        success {
+            archiveArtifacts artifacts: 'artefact.txt', fingerprint: true
         }
     }
 }
